@@ -1,0 +1,20 @@
+package com.githup.zip.rpchttp.server.service;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Map;
+
+public class TwoService {
+    private static final Logger log = LoggerFactory.getLogger(TwoService.class);
+
+    public void test1() {
+        log.info(this.getClass().getName() + " test1");
+    }
+
+    public Map<String, String> test2(Map<String, String> params) {
+        log.info(this.getClass().getName() + " test2");
+        return params;
+    }
+
+}

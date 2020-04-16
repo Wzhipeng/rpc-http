@@ -1,2 +1,2 @@
 # rpc-http
-an easy use http
+an easy rpc use http

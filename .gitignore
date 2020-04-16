@@ -1,0 +1,8 @@
+target
+server/target
+client/target
+.settings
+.classpath
+.project
+.idea
+*.iml
