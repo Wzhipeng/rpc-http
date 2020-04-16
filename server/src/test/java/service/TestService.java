@@ -1,13 +1,13 @@
-package com.githup.zip.rpchttp.server.service;
+package service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
-public class OneService {
+public class TestService {
 
-    private static final Logger log = LoggerFactory.getLogger(OneService.class);
+    private static final Logger log = LoggerFactory.getLogger(TestService.class);
 
     public String query1(Integer id) {
         return "query1 return " + id;

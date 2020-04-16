@@ -1,35 +1,34 @@
-package com.githup.zip.rpchttp.server.rpc;
+package controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.protobuf.Api;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.githup.zip.rpchttp.server.rpc.ApiResponse;
+import com.githup.zip.rpchttp.server.rpc.ServiceGetter;
+import org.junit.Test;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-@RestController("/common")
-public class CommonController {
+import static org.junit.Assert.assertEquals;
+
+public class CommonTest {
 
     private static ObjectMapper om = new ObjectMapper();
-    private static TypeReference mapRef = new TypeReference<Map<String, Object>>() {
+    private  TypeReference mapRef = new TypeReference<Map<String, Object>>() {
     };
-    private static TypeReference listRef = new TypeReference<List<String>>() {
+    private  TypeReference listRef = new TypeReference<List<String>>() {
     };
 
-    @RequestMapping("/")
-    public ApiResponse rpcServiceGetter(String className, String methodName, String argsValues, String argsTypes) {
+    @Test
+    public void rpcServiceGetterTest() {
+        String className = "service.TestService";
+        String methodName = "query1";
+        String argsValues = "[1]";
+        String argsTypes = "[\"java.lang.Integer\"]";
         try {
-            //先反射出调用的service名
             Class tClass = Class.forName(className);
-            if (tClass == null)
-                return ApiResponse.FAIL("服务器解析失败，不存在次方法调用");
-
-            //通过argsValues和argsTypes 解析出 方法调用的参数和类型
             List<String> valueJson = om.readValue(argsValues, listRef);
             List<String> typeJson = om.readValue(argsTypes, listRef);
 
@@ -44,29 +43,17 @@ public class CommonController {
                     valueList.add(om.readValue(valueJson.get(i), one));
                 }
             }
-
-
-            //再通过反射类获取即将调用的方法
             Class[] parameterTypes = new Class[typeClassList.size()];
             parameterTypes = typeClassList.toArray(parameterTypes);
             Method method = tClass.getMethod(methodName, parameterTypes);
-            if (method == null) {
-                return ApiResponse.FAIL("服务器解析失败，调用方法名不存在");
-            }
 
             Object obj = ServiceGetter.getServiceByClass(tClass);
-            if (obj == null) {
-                return ApiResponse.FAIL("服务器解析失败，无法生成" + className + "实例");
-            }
-
-            //调用次方法，传参，返回结果
             Object[] args = new Object[valueList.size()];
             args = valueList.toArray(args);
             Object result = method.invoke(obj, args);
-            return ApiResponse.OK(result);
+            assertEquals("query1 return 1", result);
         } catch (Exception e) {
             e.printStackTrace();
-            return ApiResponse.FAIL("服务器解析异常，请校验客户端调用是否正确 " + e.getMessage());
         }
     }
 }
