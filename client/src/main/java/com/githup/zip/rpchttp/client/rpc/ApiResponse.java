@@ -1,4 +1,5 @@
-package com.githup.zip.rpchttp.server.rpc;
+package com.githup.zip.rpchttp.client.rpc;
+
 
 import lombok.Data;
 import org.springframework.http.HttpStatus;
@@ -35,5 +36,8 @@ public class ApiResponse<T> {
         return resp;
     }
 
+    public boolean isSuccess() {
+        return "ok".equals(message);
+    }
 
 }

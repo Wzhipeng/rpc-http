@@ -3,6 +3,7 @@ package service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class TestService {
@@ -13,8 +14,8 @@ public class TestService {
         return "query1 return " + id;
     }
 
-    public int query2(Map<String, Object> params) {
+    public Map<String, Object> query2(HashMap<String, Object> params) {
         log.info("query2: param=" + params);
-        return 1;
+        return params;
     }
 }
